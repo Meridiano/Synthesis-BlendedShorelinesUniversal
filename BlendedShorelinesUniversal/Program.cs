@@ -48,12 +48,22 @@ namespace BlendedShorelinesUniversal
                 float fREFR = Settings.Value.NewRefractionValue;
                 float fNORM = Settings.Value.NewNormalsValue;
                 float fSPEC = Settings.Value.NewSpecularLightingValue;
+                // log
+                string sREFL = bREFL ? fREFL.ToString("R") : "No Changes";
+                string sREFR = bREFR ? fREFR.ToString("R") : "No Changes";
+                string sNORM = bNORM ? fNORM.ToString("R") : "No Changes";
+                string sSPEC = bSPEC ? fSPEC.ToString("R") : "No Changes";
+                Console.WriteLine("Reflections = " + sREFL);
+                Console.WriteLine("Refraction = " + sREFR);
+                Console.WriteLine("Normals = " + sNORM);
+                Console.WriteLine("Specular Lighting = " + sSPEC);
+                // process
                 foreach (var waterGetter in state.LoadOrder.PriorityOrder.Water().WinningOverrides())
                 {
-                    bool skipREFL = waterGetter.DepthReflections.Equals(fREFL);
-                    bool skipREFR = waterGetter.DepthRefraction.Equals(fREFR);
-                    bool skipNORM = waterGetter.DepthNormals.Equals(fNORM);
-                    bool skipSPEC = waterGetter.DepthSpecularLighting.Equals(fSPEC);
+                    bool skipREFL = !bREFL || waterGetter.DepthReflections.Equals(fREFL);
+                    bool skipREFR = !bREFR || waterGetter.DepthRefraction.Equals(fREFR);
+                    bool skipNORM = !bNORM || waterGetter.DepthNormals.Equals(fNORM);
+                    bool skipSPEC = !bSPEC || waterGetter.DepthSpecularLighting.Equals(fSPEC);
                     if (skipREFL && skipREFR && skipNORM && skipSPEC)
                     {
                         Console.WriteLine(waterGetter.EditorID + " > Skip the correct record");
